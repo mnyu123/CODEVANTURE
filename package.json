@@ -1,0 +1,55 @@
+{
+  "name": "codevanture",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A story-driven coding adventure. Initial development scaffold.",
+  "type": "module",
+  "engines": {
+    "node": ">=24.15.0 <25",
+    "npm": ">=11 <12"
+  },
+  "packageManager": "npm@11.13.0",
+  "scripts": {
+    "dev": "vite",
+    "dev:full": "netlify dev --offline --no-open",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
+    "build": "npm run typecheck && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run lint && npm run format:check && npm run build"
+  },
+  "dependencies": {
+    "@codemirror/lang-javascript": "6.2.5",
+    "@google/genai": "2.31.0",
+    "@supabase/supabase-js": "2.118.0",
+    "blockly": "13.4.0",
+    "codemirror": "6.0.2",
+    "phaser": "3.90.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@netlify/functions": "6.0.3",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "eslint": "10.13.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-refresh": "0.5.7",
+    "globals": "17.13.0",
+    "netlify-cli": "27.14.2",
+    "prettier": "3.9.10",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1",
+    "vite": "8.3.5"
+  },
+  "overrides": {
+    "netlify-cli": {
+      "toml": "5.0.1"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+node_modules
+dist
+.netlify
+package-lock.json
+.env
+.env.*
+!.env.example
