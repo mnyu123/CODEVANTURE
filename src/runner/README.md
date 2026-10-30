@@ -1,5 +1,9 @@
 # Runner
 
+`languageAdapter.ts`가 C/C++/Java/Python의 현재 문제용 문법을 기존 AST 실행기로 연결합니다.
+이것은 실제 컴파일러가 아니며 전체 언어 의미와 표준 라이브러리를 지원하지 않습니다.
+Worker 입력은 `{ source, language }`이고 실행 한도와 해제 방식은 동일합니다.
+
 Acorn AST의 허용된 JavaScript 일부 문법을 `interpreter.ts`에서 해석하고 `code.worker.ts`에서 실행합니다.
 변수, 숫자·불리언, 배열, 배열 인덱스·length, 사칙연산, for/for-of, if, activate를 지원합니다.
 함수·클래스·임의 객체·외부 API·동적 코드는 허용하지 않습니다. 일부 언어 의미(블록 스코프·const 재할당 등)는 전체 JavaScript와 다릅니다.

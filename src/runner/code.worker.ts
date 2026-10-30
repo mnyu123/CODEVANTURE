@@ -1,8 +1,15 @@
 /// <reference lib="webworker" />
 import { interpret } from './interpreter';
-self.onmessage = (event: MessageEvent<string>) => {
+import { normalizeSource } from './languageAdapter';
+import type { Language } from '../content/languages';
+self.onmessage = (
+  event: MessageEvent<{ source: string; language: Language }>,
+) => {
   try {
-    self.postMessage({ ok: true, value: interpret(event.data) });
+    self.postMessage({
+      ok: true,
+      value: interpret(normalizeSource(event.data.source, event.data.language)),
+    });
   } catch (error) {
     self.postMessage({
       ok: false,

@@ -1,3 +1,124 @@
+.difficulty-page {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 70px 36px;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    #284337 0%,
+    #111f21 45%,
+    #0b151c 80%
+  );
+}
+.difficulty-content {
+  max-width: 1200px;
+  width: 100%;
+}
+.difficulty-content > .eyebrow {
+  display: block;
+  text-align: center;
+  letter-spacing: 5px;
+}
+.difficulty-content h1 {
+  text-align: center;
+  font-size: clamp(32px, 5vw, 62px);
+  letter-spacing: 6px;
+  margin: 18px 0;
+}
+.difficulty-intro {
+  text-align: center;
+  color: #b2c7b6;
+  margin-bottom: 48px;
+}
+.difficulty-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+.difficulty-card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 28px 24px;
+  border: 1px solid #41594a;
+  border-radius: 8px;
+  background: #172822b8;
+  color: #c9dbcf;
+  transition:
+    transform 0.2s,
+    border-color 0.2s,
+    background 0.2s;
+}
+button.difficulty-card:hover {
+  transform: translateY(-6px);
+  background: #244033;
+  border-color: #b2d29e;
+}
+.difficulty-number {
+  font:
+    12px Consolas,
+    monospace;
+  letter-spacing: 3px;
+  color: #9cb88e;
+}
+.difficulty-card h2 {
+  margin: 28px 0 15px;
+  font-size: 30px;
+}
+.difficulty-card strong {
+  font-size: 13px;
+  font-weight: 500;
+}
+.difficulty-card p {
+  flex: 1;
+  font-size: 12px;
+  line-height: 1.9;
+  color: #91a99a;
+  margin: 16px 0 32px;
+}
+.difficulty-enter {
+  font-size: 11px;
+  color: #d3e5b8;
+}
+.difficulty-card.unavailable {
+  opacity: 0.5;
+}
+.difficulty-footnote {
+  text-align: center;
+  color: #81988b;
+  font-size: 11px;
+  margin-top: 32px;
+}
+.language-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+}
+.language-row span {
+  margin-left: auto;
+  font-size: 10px;
+  color: #91a99a;
+}
+.modal .runtime-note {
+  color: #91a99a;
+  font-size: 10px;
+  margin: 10px 0;
+}
+.block-preview {
+  padding: 12px;
+  background: #0f1d18;
+  color: #c9ddb9;
+  border-radius: 4px;
+}
+@media (max-width: 1000px) {
+  .difficulty-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .language-row span {
+    display: none;
+  }
+}
 :root {
   font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
   color: #d4e0d7;

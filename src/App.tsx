@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useReducer, useState } from 'react';
 import { chapter } from './content/chapter';
 import type { Mode } from './content/chapter';
 import { initialProgress, progression } from './game/progression';
+import Difficulty from './features/Difficulty';
 const World = lazy(() => import('./game/World'));
 const CodePanel = lazy(() => import('./features/CodePanel'));
 export default function App() {
@@ -21,6 +22,8 @@ export default function App() {
     window.addEventListener('keydown', escape);
     return () => window.removeEventListener('keydown', escape);
   }, []);
+  if (state.phase === 'difficulty' || !state.mode)
+    return <Difficulty onSelect={(mode) => dispatch({ type: 'mode', mode })} />;
   if (state.phase === 'opening')
     return (
       <main className="opening">

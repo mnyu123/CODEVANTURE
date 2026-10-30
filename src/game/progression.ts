@@ -1,22 +1,25 @@
 import type { Mode } from '../content/chapter';
-export type Phase = 'opening' | 'explore' | 'dialogue' | 'coding' | 'complete';
+export type Phase =
+  'difficulty' | 'opening' | 'explore' | 'dialogue' | 'coding' | 'complete';
 export interface Progress {
   phase: Phase;
-  mode: Mode;
+  mode: Mode | null;
   gateOpen: boolean;
 }
 export type Action =
   | { type: 'start' | 'talk' | 'close' | 'code' | 'solved' | 'complete' }
   | { type: 'mode'; mode: Mode };
 export const initialProgress: Progress = {
-  phase: 'opening',
-  mode: 'medium',
+  phase: 'difficulty',
+  mode: null,
   gateOpen: false,
 };
 export function progression(state: Progress, action: Action): Progress {
   switch (action.type) {
     case 'start':
-      return state.phase === 'opening' ? { ...state, phase: 'explore' } : state;
+      return state.phase === 'opening' && state.mode
+        ? { ...state, phase: 'explore' }
+        : state;
     case 'talk':
       return state.phase === 'explore'
         ? { ...state, phase: 'dialogue' }
@@ -31,7 +34,11 @@ export function progression(state: Progress, action: Action): Progress {
         : state;
     case 'mode':
       return state.phase !== 'complete'
-        ? { ...state, mode: action.mode }
+        ? {
+            ...state,
+            mode: action.mode,
+            phase: state.phase === 'difficulty' ? 'opening' : state.phase,
+          }
         : state;
     case 'solved':
       return state.phase === 'coding'

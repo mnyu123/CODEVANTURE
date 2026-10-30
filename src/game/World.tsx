@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import Phaser from 'phaser';
+import { createTraveler } from './traveler';
 interface Props {
   locked: boolean;
   gateOpen: boolean;
@@ -71,25 +72,12 @@ export default function World(props: Props) {
           this.add.rectangle(i * 23, 607, 1, 5 + (i % 7), 0x71907b, 0.6);
         const ground = this.add.rectangle(width / 2, 650, width, 34, 0x263b3b);
         this.physics.add.existing(ground, true);
-        const texture = this.add.graphics();
-        texture.fillStyle(0x92d4c5);
-        texture.fillRect(7, 3, 16, 15);
-        texture.fillStyle(0xd6b890);
-        texture.fillRect(10, 9, 12, 10);
-        texture.fillStyle(0x254f56);
-        texture.fillRect(5, 19, 20, 18);
-        texture.fillStyle(0xe6c889);
-        texture.fillRect(5, 22, 20, 3);
-        texture.fillStyle(0x142a35);
-        texture.fillRect(7, 37, 7, 7);
-        texture.fillRect(19, 37, 7, 7);
-        texture.generateTexture('traveler', 32, 46);
-        texture.destroy();
+        createTraveler(this);
         this.player = this.physics.add
-          .sprite(180, 575, 'traveler')
+          .sprite(180, 575, 'traveler-0')
           .setScale(1.5)
           .setCollideWorldBounds(true);
-        this.player.body!.setSize(22, 42);
+        this.player.setSize(20, 48).setOffset(10, 6);
         this.physics.add.collider(this.player, ground);
         this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
         this.cameras.main.setDeadzone(180, 180);
@@ -209,6 +197,8 @@ export default function World(props: Props) {
         }
         if (paused) {
           this.player.setVelocityX(0);
+          this.player.anims.stop();
+          this.player.setTexture('traveler-0');
           this.input.keyboard?.resetKeys();
           this.prompt.setVisible(false);
           return;
@@ -217,6 +207,12 @@ export default function World(props: Props) {
         const right = this.keys.RIGHT.isDown || this.keys.D.isDown;
         this.player.setVelocityX(left ? -260 : right ? 260 : 0);
         if (left || right) this.player.setFlipX(left);
+        if ((left || right) && this.player.body!.blocked.down)
+          this.player.play('traveler-walk', true);
+        else {
+          this.player.anims.stop();
+          this.player.setTexture('traveler-0');
+        }
         if (
           Phaser.Input.Keyboard.JustDown(this.keys.SPACE) &&
           this.player.body!.blocked.down
