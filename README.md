@@ -2,8 +2,14 @@
 
 사용자가 직접 이동하며 이야기 속 사건을 코딩으로 해결하는 횡스크롤 웹 TRPG입니다.
 
-현재는 **초기 개발환경만 구성한 단계**입니다. 실행 화면과 서버 상태 확인 API가 있으며,
-게임 시작 연출, 이동, 코딩 문제, 로그인, 저장, 실제 AI 연결은 아직 구현하지 않았습니다.
+현재는 **첫 지역을 플레이할 수 있는 로컬 프로토타입**입니다.
+흰 화면에서 `Hello World;`를 입력하면 월드가 나타납니다. 방향키/A·D로 이동하고,
+Space로 점프, E로 NPC와 단말기를 조사합니다. 코딩으로 관문을 열고 동쪽 빛에서 E를 누르면 완료됩니다.
+쉬움은 블록, 중간·어려움은 코드 입력을 지원합니다. 현재 문제는 기본 동작 확인용 튜토리얼입니다.
+AI, 로그인, 저장, 외부 서비스 연결은 아직 구현하지 않았습니다. 새로고침하면 처음부터 시작합니다.
+
+중간 풀이 예시: `let sum=0; for(const x of [2,4,6]) { sum+=x; } activate(sum);`
+실행기는 JavaScript 일부 문법만 지원하며 함수 정의, 외부 API, 임의 객체 접근은 허용하지 않습니다.
 
 ## 다른 데스크톱에서 시작하기
 
@@ -48,8 +54,8 @@ npm run dev:full
 ## 기술 구성
 
 - 웹: React, TypeScript, Vite
-- 월드: Phaser 3.90.0 (의존성만 준비)
-- 편집기: Blockly, CodeMirror (의존성만 준비)
+- 월드: Phaser 3.90.0
+- 편집기: Blockly, CodeMirror
 - 백엔드: Node.js + TypeScript + Netlify Functions
 - DB·인증: Supabase PostgreSQL/Auth 예정, SDK만 준비
 - AI: Gemini API 예정, `@google/genai` SDK만 준비
@@ -98,8 +104,8 @@ Copy-Item .env.example .env
 
 ## 배포와 외부 서비스
 
-오늘은 GitHub에 초기 환경만 보관합니다. Netlify/Supabase 프로젝트 생성, DB 스키마 적용,
-AI 호출, 공개 배포는 수행하지 않습니다. `netlify.toml`은 추후 배포에 사용할 준비 설정입니다.
+현재 작업은 로컬 플레이용입니다. Netlify/Supabase 프로젝트 생성, DB 스키마 적용,
+AI 호출, 공개 배포는 후속 작업입니다. `netlify.toml`은 추후 배포에 사용할 준비 설정입니다.
 GitHub Actions는 설치·검사·빌드만 하며 배포하지 않습니다.
 
 Netlify에 연결할 때 빌드 명령은 `npm run build`, 결과 경로는 `dist`, 함수 경로는

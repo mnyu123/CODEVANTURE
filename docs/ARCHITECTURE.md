@@ -18,7 +18,11 @@ Netlify Functions (Node.js / TypeScript)
   로그인 -> Supabase Auth
 ```
 
-현재 실행되는 것은 React 확인 화면과 `GET /api/health`뿐입니다.
+현재는 첫 지역 로컬 프로토타입과 `GET /api/health`를 실행합니다.
+React의 reducer가 진행 상태를 소유하고 Phaser는 상호작용 사건만 전달합니다.
+코드 실행은 Acorn으로 파싱한 AST의 허용 목록을 Worker에서 해석합니다.
+소스 6,000자, 배열 원소 100개, 연산 10,000회, Worker 실행 1.5초로 제한합니다.
+이 실행기는 JavaScript의 일부 문법을 지원하는 학습용 프로토타입이며 전체 언어 호환이나 강제 메모리 격리를 제공하지 않습니다.
 SDK 설치를 실제 외부 서비스 연결 완료로 간주하지 않습니다.
 
 ## 코드 배치
