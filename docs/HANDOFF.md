@@ -1,5 +1,14 @@
 # 다른 데스크톱으로 이어가기
 
+## 다섯 스테이지와 Netlify 배포
+
+관문, 협곡, 수로, 온실을 지나 별빛 관측소의 봉화를 밝힙니다.
+배열은 관측소에서 도입하고, 앞의 네 스테이지는 계산과 조건식을 연습합니다.
+지역별 문제와 테스트는 `src/content/chapter.ts`에 있으며, 진행 reducer가 코드 연출 단계와 지역 전환을 관리합니다.
+
+게임과 상태 함수를 Netlify CLI로 수동 배포했습니다. [공개 게임](https://codevanture.netlify.app)과
+[`/api/health`](https://codevanture.netlify.app/api/health)를 확인했습니다. GitHub 자동 배포는 구성하지 않았습니다.
+
 ## 난이도·언어 선택 및 캐릭터 개선
 
 첫 화면에서 난이도를 고른 뒤 정확한 `Hello World;`를 입력합니다. 중간 난이도가 자동 선택되지 않습니다.

@@ -1,18 +1,28 @@
 import { parse } from 'acorn';
 import type { Node } from 'acorn';
+import type { Inputs, Signal, TestCase } from '../content/chapter';
 type Value = number | boolean | Value[];
 interface Ast {
   type: string;
   [key: string]: unknown;
 }
 const ast = (value: unknown): Ast => value as Ast;
-export function interpret(source: string): number {
+export function interpret(source: string, inputs?: Inputs): Signal {
   if (source.length > 6000)
     throw new Error('코드는 6,000자까지 입력할 수 있어요.');
   const tree: Node = parse(source, { ecmaVersion: 2022 });
   const variables = new Map<string, Value>();
+  for (const [name, value] of Object.entries(inputs ?? {})) {
+    if (typeof value === 'number' || typeof value === 'boolean') {
+      variables.set(name, value);
+    } else {
+      if (value.length > 100) throw new Error('배열이 너무 커요.');
+      variables.set(name, [...value]);
+      variables.set(`${name}Count`, value.length);
+    }
+  }
   let budget = 10000;
-  let result: number | undefined;
+  let result: Signal | undefined;
   function visit(input: unknown): Value {
     if (--budget < 0)
       throw new Error('실행 한도를 넘었어요. 반복 조건을 확인하세요.');
@@ -55,10 +65,10 @@ export function interpret(source: string): number {
         for (const item of nodes('declarations')) {
           if (ast(item.id).type !== 'Identifier')
             throw new Error('단순 변수만 선언할 수 있어요.');
-          variables.set(
-            String(ast(item.id).name),
-            item.init ? visit(item.init) : 0,
-          );
+          const name = String(ast(item.id).name);
+          if (item.init) variables.set(name, visit(item.init));
+          else if (node.kind !== 'var' || !variables.has(name))
+            variables.set(name, 0);
         }
         return 0;
       case 'BinaryExpression': {
@@ -84,10 +94,18 @@ export function interpret(source: string): number {
           case '>=':
             return number(left) >= number(right);
           case '===':
+          case '==':
             return left === right;
           case '!==':
+          case '!=':
             return left !== right;
         }
+        break;
+      }
+      case 'LogicalExpression': {
+        const left = run('left');
+        if (node.operator === '&&') return left ? run('right') : left;
+        if (node.operator === '||') return left ? left : run('right');
         break;
       }
       case 'UnaryExpression':
@@ -170,7 +188,8 @@ export function interpret(source: string): number {
         ) {
           if (result !== undefined)
             throw new Error('activate는 한 번만 호출하세요.');
-          result = number(visit(nodes('arguments')[0]));
+          const output = visit(nodes('arguments')[0]);
+          result = typeof output === 'boolean' ? output : number(output);
           return 0;
         }
         break;
@@ -181,4 +200,19 @@ export function interpret(source: string): number {
   if (result === undefined)
     throw new Error('activate(에너지 합계)를 호출해 주세요.');
   return result;
+}
+
+export function grade(source: string, tests: readonly TestCase[]): void {
+  if (!tests.length) throw new Error('이 문제의 판정 데이터를 찾을 수 없어요.');
+  for (const [index, test] of tests.entries()) {
+    const value = interpret(source, test.inputs);
+    if (value !== test.expected) {
+      const name = tests.length === 1 ? '보낸 값' : `입력 ${index + 1}의 결과`;
+      throw new Error(
+        index === 0
+          ? `${name}: ${value}. 필요한 값은 ${test.expected}이에요.`
+          : `${name}가 예상과 달라요. 다른 값이 들어와도 같은 규칙으로 동작하는지 확인하세요.`,
+      );
+    }
+  }
 }

@@ -4,9 +4,15 @@ import type { Language } from '../content/languages';
 function pythonSource(source: string): string {
   const output: string[] = [];
   const indents = [0];
+  const assigned = new Set<string>();
   let expectsBody = false;
   const expression = (text: string): string =>
-    text.replace(/\blen\(\s*([A-Za-z_]\w*)\s*\)/g, '$1.length');
+    text
+      .replace(/\blen\(\s*([A-Za-z_]\w*)\s*\)/g, '$1.length')
+      .replace(/\bTrue\b/g, 'true')
+      .replace(/\bFalse\b/g, 'false')
+      .replace(/\band\b/g, '&&')
+      .replace(/\bor\b/g, '||');
   for (const original of source.split(/\r?\n/)) {
     const line = original.replace(/#.*$/, '').trimEnd();
     if (!line.trim()) continue;
@@ -45,13 +51,20 @@ function pythonSource(source: string): string {
     } else if ((match = text.match(/^if\s+(.+):\s*$/))) {
       output.push(`if(${expression(match[1])}){`);
       expectsBody = true;
+    } else if ((match = text.match(/^elif\s+(.+):\s*$/))) {
+      output.push(`else if(${expression(match[1])}){`);
+      expectsBody = true;
     } else if (text === 'else:') {
       output.push('else{');
       expectsBody = true;
     } else if (text === 'pass') output.push(';');
-    else if ((match = text.match(/^([A-Za-z_]\w*)\s*=([^=].*)$/)))
-      output.push(`let ${match[1]}=${expression(match[2])};`);
-    else if (/^[A-Za-z_]\w*\s*\+=/.test(text) || /^activate\(.*\)$/.test(text))
+    else if ((match = text.match(/^([A-Za-z_]\w*)\s*=([^=].*)$/))) {
+      assigned.add(match[1]);
+      output.push(`${match[1]}=${expression(match[2])};`);
+    } else if (
+      /^[A-Za-z_]\w*\s*\+=/.test(text) ||
+      /^activate\(.*\)$/.test(text)
+    )
       output.push(`${expression(text)};`);
     else
       throw new Error(
@@ -63,7 +76,9 @@ function pythonSource(source: string): string {
     indents.pop();
     output.push('}');
   }
-  return output.join('\n');
+  return [...Array.from(assigned, (name) => `var ${name};`), ...output].join(
+    '\n',
+  );
 }
 export function normalizeSource(source: string, language: Language): string {
   if (source.length > 6000)
@@ -86,7 +101,7 @@ export function normalizeSource(source: string, language: Language): string {
     if (wrapped) text = wrapped[1].replace(/return\s+0\s*;\s*$/, '');
   }
   // Validate the input alphabet before transforming the supported declarations.
-  if (!/^[\w\s[\]{}();,.+*/%<>=!:-]*$/.test(text))
+  if (!/^[\w\s[\]{}();,.+*/%<>=!&|:-]*$/.test(text))
     throw new Error('현재 튜토리얼에서 지원하지 않는 문자예요.');
   text = text.replace(
     /\bint\s*\[\s*\]\s*(\w+)\s*=\s*\{([^{}]*)\}/g,
@@ -100,7 +115,7 @@ export function normalizeSource(source: string, language: Language): string {
     /\bfor\s*\(\s*int\s+(\w+)\s*:\s*(\w+)\s*\)/g,
     'for (const $1 of $2)',
   );
-  text = text.replace(/\bint\s+(\w+)/g, 'let $1');
+  text = text.replace(/\b(?:int|bool|boolean|_Bool)\s+(\w+)/g, 'let $1');
   // The AST interpreter still rejects functions, calls to host APIs and object access.
   return text;
 }

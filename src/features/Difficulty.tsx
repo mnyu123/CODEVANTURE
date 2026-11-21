@@ -17,9 +17,9 @@ const options: {
     id: 'medium',
     number: '02',
     title: '중간',
-    subtitle: '직접 작성하는 첫 번째 코드',
+    subtitle: '계산부터 반복문까지',
     description:
-      '브론즈·실버 수준을 목표로, 변수·반복·조건부터 차근차근 풀어보세요.',
+      '짧은 식과 조건부터 시작해요. 모바일에서는 블록으로 시작할 수 있어요.',
   },
   {
     id: 'hard',
@@ -69,10 +69,6 @@ export default function Difficulty({
             <span className="difficulty-enter">준비 중</span>
           </div>
         </div>
-        <p className="difficulty-footnote">
-          현재는 첫 지역 튜토리얼입니다. 이후 지역에서 난이도별 문제가
-          확장됩니다.
-        </p>
       </div>
     </main>
   );

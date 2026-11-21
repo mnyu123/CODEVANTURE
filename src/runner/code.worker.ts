@@ -1,15 +1,19 @@
 /// <reference lib="webworker" />
-import { interpret } from './interpreter';
+import { grade } from './interpreter';
 import { normalizeSource } from './languageAdapter';
+import type { TestCase } from '../content/chapter';
 import type { Language } from '../content/languages';
 self.onmessage = (
-  event: MessageEvent<{ source: string; language: Language }>,
+  event: MessageEvent<{
+    source: string;
+    language: Language;
+    tests: TestCase[];
+  }>,
 ) => {
   try {
-    self.postMessage({
-      ok: true,
-      value: interpret(normalizeSource(event.data.source, event.data.language)),
-    });
+    const { source, language, tests } = event.data;
+    grade(normalizeSource(source, language), tests);
+    self.postMessage({ ok: true });
   } catch (error) {
     self.postMessage({
       ok: false,

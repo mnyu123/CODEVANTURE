@@ -105,6 +105,53 @@ button.difficulty-card:hover {
   font-size: 10px;
   margin: 10px 0;
 }
+.task-brief {
+  margin: 16px 0;
+  padding: 14px 18px;
+  background: #192e39;
+  border: 1px solid #44616a;
+  border-left: 4px solid #ffd28f;
+  border-radius: 4px;
+}
+.modal .task-rule {
+  margin: 0;
+  color: #fff2d4;
+  font-size: clamp(18px, 2.3vw, 23px);
+  line-height: 1.5;
+  word-break: keep-all;
+}
+.task-input {
+  margin-top: 14px;
+  color: #fff2d4;
+  font-size: 17px;
+}
+.task-input ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin: 7px 0;
+  padding: 0;
+  list-style: none;
+}
+.task-input li {
+  padding: 4px 8px;
+  background: #101e2b;
+  border-radius: 4px;
+  color: #fff0b5;
+  font-size: 17px;
+  font-weight: 700;
+}
+.task-input li code {
+  overflow-wrap: anywhere;
+}
+.modal .task-input p,
+.modal .task-hint {
+  margin: 8px 0 0;
+  color: #d6e6e6;
+  font-size: 14px;
+  line-height: 1.55;
+  word-break: keep-all;
+}
 .block-preview {
   padding: 12px;
   background: #0f1d18;
@@ -131,7 +178,9 @@ button.difficulty-card:hover {
 }
 body {
   margin: 0;
-  min-width: 700px;
+}
+body:has(.overlay) {
+  overflow: hidden;
 }
 button,
 input,
@@ -190,6 +239,15 @@ select:focus-visible {
     20px/1.7 Consolas,
     monospace;
   caret-color: #a3dac8;
+}
+.key-entry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.key-submit,
+.touch-controls {
+  display: none;
 }
 .adventure {
   max-width: 1600px;
@@ -378,6 +436,33 @@ h2 {
   overflow: hidden;
   margin: 24px 0;
 }
+.editor--text {
+  height: 230px;
+}
+.editor-toggle,
+.symbol-keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.editor-toggle {
+  margin: 14px 0;
+}
+.editor-toggle button[aria-pressed='true'] {
+  background: #c9d9ad;
+  color: #1d3226;
+  font-weight: 650;
+}
+.symbol-keys {
+  margin: 8px 0 14px;
+}
+.symbol-keys button {
+  min-width: 44px;
+  padding: 6px 9px;
+  font:
+    15px Consolas,
+    monospace;
+}
 .feedback {
   flex: 1;
   margin: 0;
@@ -421,5 +506,197 @@ h2 {
   }
   .world-caption {
     display: none;
+  }
+}
+@media (pointer: coarse), (max-width: 700px) {
+  button,
+  select {
+    min-height: 44px;
+  }
+  select {
+    font-size: 16px;
+  }
+  .difficulty-page {
+    padding: max(24px, env(safe-area-inset-top)) 16px
+      max(24px, env(safe-area-inset-bottom));
+  }
+  .difficulty-intro {
+    margin-bottom: 22px;
+  }
+  .difficulty-card {
+    padding: 14px 12px;
+  }
+  .difficulty-card h2 {
+    margin: 8px 0;
+    font-size: 23px;
+  }
+  .difficulty-card strong,
+  .difficulty-card p {
+    font-size: 13px;
+  }
+  .difficulty-card p {
+    margin: 8px 0 12px;
+    line-height: 1.5;
+  }
+  .opening {
+    min-height: 100dvh;
+    height: auto;
+    padding: 12px;
+  }
+  .key-form {
+    width: min(100%, 520px);
+    padding: 24px 18px;
+  }
+  .key-form input {
+    min-width: 0;
+  }
+  .key-submit {
+    display: inline-grid;
+    place-items: center;
+    min-width: 44px;
+    padding: 0;
+    font-size: 20px;
+  }
+  .adventure {
+    padding: max(8px, env(safe-area-inset-top))
+      max(10px, env(safe-area-inset-right))
+      max(14px, env(safe-area-inset-bottom))
+      max(10px, env(safe-area-inset-left));
+  }
+  .hud {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 8px;
+    height: auto;
+    padding-bottom: 8px;
+  }
+  .brand {
+    font-size: clamp(14px, 4.1vw, 19px);
+    letter-spacing: 1px;
+  }
+  .brand span {
+    display: none;
+  }
+  .chapter-name {
+    display: block;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    font-size: 14px;
+  }
+  .mode-label {
+    font-size: 0;
+  }
+  .mode-label select {
+    padding: 4px 6px;
+  }
+  .quest {
+    top: 8px;
+    left: 8px;
+    max-width: calc(100% - 16px);
+    padding: 6px 8px;
+  }
+  .quest p {
+    margin-top: 3px;
+    font-size: 13px;
+  }
+  .controls {
+    display: none;
+  }
+  .touch-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 8px;
+    margin-top: 10px;
+    user-select: none;
+  }
+  .touch-controls button {
+    min-height: 55px;
+    padding: 0 6px;
+    border-radius: 7px;
+    background: #1d322a;
+    font-size: 17px;
+    font-weight: 600;
+    touch-action: none;
+    -webkit-touch-callout: none;
+  }
+  .touch-controls button:first-child,
+  .touch-controls button:nth-child(2) {
+    font-size: 24px;
+  }
+  .touch-controls button:active {
+    color: #17271e;
+    background: #c9d9ad;
+  }
+  .overlay {
+    padding: max(8px, env(safe-area-inset-top))
+      max(8px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom))
+      max(8px, env(safe-area-inset-left));
+  }
+  .modal {
+    width: min(100%, 720px);
+    max-height: calc(
+      100dvh - max(8px, env(safe-area-inset-top)) -
+        max(8px, env(safe-area-inset-bottom))
+    );
+    padding: 14px;
+    overscroll-behavior: contain;
+  }
+  .modal h2 {
+    font-size: 23px;
+    margin: 10px 0;
+  }
+  .task-brief {
+    margin: 10px 0;
+    padding: 10px;
+  }
+  .task-input li {
+    font-size: 16px;
+  }
+  .language-row {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .editor {
+    margin: 10px 0;
+  }
+  .editor--text {
+    height: clamp(125px, 32dvh, 250px);
+  }
+  .block-preview {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+  .code-panel .panel-bottom {
+    position: sticky;
+    bottom: -14px;
+    gap: 8px;
+    z-index: 2;
+    padding: 8px 0;
+    background: #16251f;
+    border-top: 1px solid #3c5044;
+  }
+  .code-panel .panel-top {
+    position: sticky;
+    top: -14px;
+    z-index: 3;
+    padding: 5px 0;
+    background: #16251f;
+  }
+}
+@media (max-width: 700px) and (orientation: portrait) {
+  .world-canvas,
+  .world-loading {
+    aspect-ratio: 1;
+  }
+}
+@media (pointer: coarse) and (orientation: landscape) and (max-height: 650px) {
+  .world-frame {
+    max-width: calc((100dvh - 140px) * 1.7778);
+    margin-inline: auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .difficulty-card {
+    transition: none;
   }
 }
